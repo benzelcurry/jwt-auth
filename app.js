@@ -1,19 +1,8 @@
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const express = require('express');
 
-passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-  },
-  function (email, password, cb) {
-    return UserModel.findOne({ email, password })
-      .then(user => {
-        if (!user) {
-          return cb(null, false, { message: 'Incorrect email or password.' });
-        }
+require('./passport');
 
-        return cb(null, user, { message: 'Logged in successfully' });
-      })
-      .catch(err => cb(err));
-  }
-));
+const app = express();
+const auth = require('./routes/auth');
+
+app.use('/auth', auth);
